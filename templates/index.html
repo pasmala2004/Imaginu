@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Original vs Enhanced Prompt</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main>
+    <h1>Original vs enhanced prompt</h1>
+
+    <section class="panel">
+      <label for="prompt">Describe the image</label>
+      <textarea id="prompt" rows="3" maxlength="1000" dir="auto" placeholder="two people walking on a beach (any language, including Arabic)"></textarea>
+
+      <div class="row">
+        <div>
+          <label for="style">Style</label>
+          <select id="style"></select>
+        </div>
+        <div>
+          <label for="aspect">Aspect ratio</label>
+          <select id="aspect"></select>
+        </div>
+        <div>
+          <label for="seed">Seed <small>(0 = random)</small></label>
+          <input id="seed" type="number" min="0" value="0">
+        </div>
+      </div>
+
+      <button id="generate" type="button">Generate</button>
+    </section>
+
+    <div id="loading" class="loading" hidden>
+      <div class="spinner"></div>
+      <span>Checking, enhancing and generating two images… this can take up to a minute.</span>
+    </div>
+
+    <div id="alerts"></div>
+
+    <section id="results" class="results" hidden>
+      <article class="card">
+        <h2>Original prompt</h2>
+        <p class="prompt" id="original-prompt"></p>
+        <div class="image-box" id="original-box"></div>
+      </article>
+
+      <article class="card">
+        <h2>Enhanced prompt</h2>
+        <p class="prompt" id="enhanced-prompt"></p>
+        <p class="prompt negative" id="negative-prompt" hidden></p>
+        <div class="image-box" id="enhanced-box"></div>
+      </article>
+    </section>
+
+    <p id="meta" class="meta" hidden></p>
+  </main>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
