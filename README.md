@@ -98,4 +98,8 @@ Open **http://127.0.0.1:5000**.
 
 The style is applied as prompt keywords to **both** sides (the `sd3` endpoint has no style preset parameter), so the comparison isolates the effect of enhancement. To add or edit styles, change the `STYLES` dict in `pipeline.py`.
 
+<<<<<<< HEAD
 ---
+=======
+---
+>>>>>>> 35229a10712b5ea6b2d18ddb971d93b8b711465d
