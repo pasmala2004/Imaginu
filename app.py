@@ -29,7 +29,7 @@ def missing_files() -> list[str]:
 
 
 def missing_keys() -> list[str]:
-    return [k for k in ("STABILITY_API_KEY", "OPENROUTER_API_KEY") if not os.getenv(k)]
+    return [k for k in ("STABILITY_API_KEY", "GROQ_API_KEY") if not os.getenv(k)]
 
 
 def to_data_uri(img: bytes | None) -> str | None:

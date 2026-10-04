@@ -23,7 +23,7 @@ load_dotenv()
 
 STABILITY_URL = "https://api.stability.ai/v2beta/stable-image/generate/sd3"
 SD_MODEL = os.getenv("SD_MODEL", "sd3.5-large")
-MODEL_NAME = os.getenv("MODEL_NAME", "cohere/north-mini-code:free")
+MODEL_NAME = os.getenv("MODEL_NAME", "qwen/qwen3.8-27b")
 
 # Style dropdown: label -> keywords appended to the prompt
 STYLES = {
@@ -76,8 +76,8 @@ class State(TypedDict, total=False):
 def get_llm() -> ChatOpenAI:
     return ChatOpenAI(
         model=MODEL_NAME,
-        base_url="https://openrouter.ai/api/v1",
-        api_key=os.environ["OPENROUTER_API_KEY"],
+        base_url="https://api.groq.com/openai/v1",
+        api_key=os.environ["GROQ_API_KEY"],
         temperature=0,
         max_retries=2,
     )

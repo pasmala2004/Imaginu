@@ -3,8 +3,6 @@ const $ = (id) => document.getElementById(id);
 const els = {
   prompt: $("prompt"),
   style: $("style"),
-  aspect: $("aspect"),
-  seed: $("seed"),
   button: $("generate"),
   loading: $("loading"),
   alerts: $("alerts"),
@@ -63,8 +61,6 @@ async function init() {
     const res = await fetch("/api/options");
     const opts = await res.json();
     fillSelect(els.style, opts.styles);
-    fillSelect(els.aspect, opts.aspect_ratios);
-    els.seed.max = opts.max_seed;
   } catch {
     showAlert("error", "Could not load options from the server.");
   }
@@ -90,8 +86,6 @@ async function generate() {
       body: JSON.stringify({
         prompt,
         style: els.style.value,
-        aspect_ratio: els.aspect.value,
-        seed: Number(els.seed.value) || 0,
       }),
     });
 
@@ -131,9 +125,7 @@ function render(d) {
   renderImage("enhanced-box", d.enhanced_image, d.enhanced_error, `enhanced_${d.seed}.png`);
   els.results.hidden = false;
 
-  els.meta.textContent =
-    `Style: ${d.style} · Aspect: ${d.aspect_ratio} · Seed: ${d.seed} ` +
-    "(same seed for both images, so differences come from the prompt)";
+  els.meta.textContent = `Style: ${d.style} · Seed: ${d.seed}`;
   els.meta.hidden = false;
 }
 
