@@ -5,7 +5,7 @@ user prompt -> moderate -> translate to English -> enhance -> re-moderate -> gen
                   |                                  (original vs enhanced,
                   +-> block -> refuse                 same seed, same style)
 
-env: STABILITY_API_KEY, OPENROUTER_API_KEY, MODEL_NAME (optional), SD_MODEL (optional)
+env: STABILITY_API_KEY, GROQ_API_KEY, MODEL_NAME (optional), SD_MODEL (optional)
 """
 import json
 import os

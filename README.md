@@ -1,8 +1,8 @@
-# Original vs Enhanced Prompt — Image Compare
+# Imaginu — Original vs Enhanced Prompt
 
-A small web app that shows how **prompt enhancement** changes an AI-generated image. You type a short idea, pick a style, and get two images side by side: one from your original prompt, one from an LLM-enhanced version. Both use the **same seed**, so any difference comes from the prompt alone.
+A small web app that shows how **prompt enhancement** changes an AI-generated image. You type a short idea, pick a style, and get two images: one from your original prompt, one from an LLM-enhanced version. Both use the **same seed**, so any difference comes from the prompt alone.
 
-**Stack:** Flask API · plain HTML/CSS/JS · LangGraph agent · Stable Diffusion 3 (Stability AI) · LLM via OpenRouter
+**Stack:** Flask API · plain HTML/CSS/JS · LangGraph agent · Stable Diffusion 3 (Stability AI) · LLM via Groq
 
 ---
 
@@ -43,7 +43,7 @@ If one image fails, the other still displays.
 ## Project structure
 
 ```
-image_compare/
+Imaginu/
 ├── app.py               Flask routes + input validation
 ├── pipeline.py          LangGraph agent, styles, Stability API call
 ├── templates/
@@ -60,10 +60,10 @@ image_compare/
 
 ## Setup
 
-**Requirements:** Python 3.10+, a [Stability AI](https://platform.stability.ai/) API key, and an [OpenRouter](https://openrouter.ai/) API key.
+**Requirements:** Python 3.10+, a [Stability AI](https://platform.stability.ai/) API key, and a [Groq](https://console.groq.com/) API key.
 
 ```bash
-cd image_compare
+cd Imaginu
 python -m venv .venv
 source .venv/bin/activate        # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
@@ -81,8 +81,8 @@ Open **http://127.0.0.1:5000**.
 | Variable | Required | Default | Purpose |
 |---|---|---|---|
 | `STABILITY_API_KEY` | yes | — | Stability AI image generation |
-| `OPENROUTER_API_KEY` | yes | — | LLM for moderation and enhancement |
-| `MODEL_NAME` | no | `cohere/north-mini-code:free` | Any OpenRouter model id |
+| `GROQ_API_KEY` | yes | — | LLM for moderation, translation and enhancement |
+| `MODEL_NAME` | no | `qwen/qwen3.8-27b` | Any Groq model id |
 | `SD_MODEL` | no | `sd3.5-large` | Stability model sent to the `sd3` endpoint |
 
 ---
@@ -90,7 +90,7 @@ Open **http://127.0.0.1:5000**.
 ## Using the app
 
 1. Describe the image in any language, including Arabic (up to 1000 characters). It is translated to English before generation.
-2. Choose a **style**, **aspect ratio**, and optionally a **seed** (`0` = random).
+2. Choose a **style**. A random seed is picked per request and shared by both images; the aspect ratio defaults to `1:1`.
 3. Click **Generate** (or press Ctrl/Cmd + Enter). It takes roughly 30–60 seconds.
 4. Compare the two images and download either as PNG.
 
@@ -98,8 +98,17 @@ Open **http://127.0.0.1:5000**.
 
 The style is applied as prompt keywords to **both** sides (the `sd3` endpoint has no style preset parameter), so the comparison isolates the effect of enhancement. To add or edit styles, change the `STYLES` dict in `pipeline.py`.
 
-<<<<<<< HEAD
 ---
-=======
----
->>>>>>> 35229a10712b5ea6b2d18ddb971d93b8b711465d
+
+## API
+
+| Endpoint | Body | Returns |
+|---|---|---|
+| `GET /api/options` | — | `styles`, `aspect_ratios`, `max_seed` |
+| `POST /api/generate` | `{prompt, style}` (optional: `aspect_ratio`, default `1:1`; `seed`, `0`/omitted = random) | `verdict`, `reason`, `notice`, `translated_from`, `english_prompt`, `original_prompt`, `enhanced_prompt`, `negative_prompt`, `original_image`, `enhanced_image` (base64 PNG data URIs), per-image `*_error`, `style`, `aspect_ratio`, `seed` |
+
+The UI only sends `prompt` and `style`; `aspect_ratio` and `seed` remain optional API parameters.
+
+## Notes
+
+Moderation is LLM-based, so it is a safeguard, not a guarantee.
